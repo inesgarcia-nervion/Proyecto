@@ -28,7 +28,7 @@ def users():
 @app.get("/users/{id_user}")              #El nombre nos lo podemos inventar
 def get_user(id_user : int):              #El nombre tiene que ser igual al de arriba SIEMPRE
     return search_user(id_user)
-     
+
     
     
 @app.get("/users/")       
@@ -42,7 +42,7 @@ def search_user(id : int):
     # devuelve una lista vacía si no encuentra nada
     # devuelve una lista con el usuario encontrado
     users = [user for user in users_list if user.id == id]  #en user.id, el id hace referencia a la clase creada arriba
-   
+
     # devolvemos la primera posición de la lista 
     
     if not users:

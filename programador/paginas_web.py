@@ -69,7 +69,7 @@ def next_id():
 
 
 #PUT
-@app.delete("/paginas/{id}")
+@app.put("/paginas/{id}")
 def modify_pagina(id:int, pagina:PaginaWeb):
     for index, saved_pagina in enumerate(paginasWeb_list):
         if saved_pagina.id == id:

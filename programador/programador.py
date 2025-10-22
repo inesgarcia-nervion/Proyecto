@@ -26,13 +26,13 @@ programadores_list = [
 
 #GET
 @app.get("/programadores")
-def get_programadores():
+def programadores():
     return programadores_list
 
 
 
 #En caso de que quiera un único programador:
-@app.get("/programadores/{id_programadores}")              
+@app.get("/programadores/{id_programador}")              
 def get_programador(id_programador : int):              
     return search_programador(id_programador)
 
@@ -54,7 +54,7 @@ def search_programador(id : int):
 
 
 #POST
-@app.post("programadores", status_code=201, response_model=Programador)
+@app.post("/programadores", status_code=201, response_model=Programador)
 def add_programador(programador : Programador):
     programador.id = next_id()
     programadores_list.append(programador)
@@ -69,7 +69,7 @@ def next_id():
 
 
 #PUT
-@app.put("programadores/{id}")
+@app.put("/programadores/{id}")
 def modify_programador(id:int, programador:Programador):
     for index, saved_programador in enumerate(programadores_list):
         if saved_programador.id == id:
@@ -82,10 +82,10 @@ def modify_programador(id:int, programador:Programador):
 
 
 #DELETE 
-@app.delete("programadores/{id}")
+@app.delete("/programadores/{id}")
 def remove_programador(id : int):
     for saved_programador in programadores_list:
-        if saved_programador == id:
+        if saved_programador.id == id:
             programadores_list.remove(saved_programador)
             return{}
     
