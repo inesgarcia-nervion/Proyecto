@@ -26,6 +26,7 @@ paginasWeb_list = [
 ]
 
 
+
 #GET
 @app.get("/paginas")
 def paginas():
