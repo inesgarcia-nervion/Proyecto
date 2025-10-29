@@ -1,8 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 
-app = FastAPI()
+router = APIRouter(prefix="/paginas", tags=["Paginas Web"])     #Tags: http://127.0.0.1:8000/docs   (para diferenciar las apis)
 
 class PaginaWeb(BaseModel):
     id: int
@@ -28,20 +28,20 @@ paginasWeb_list = [
 
 
 #GET
-@app.get("/paginas")
+@router.get("/")
 def paginas():
     return paginasWeb_list
 
 
 
-@app.get("/paginas/{id_pagina}")
+@router.get("/{id_pagina}")
 def get_pagina(id_pagina : int):
     return search_pagina(id_pagina)
 
 
-@app.get("/paginas/")
+@router.get("/query/")                  #http://127.0.0.1:8000/paginas/query/?id=1
 def get_pagina(id : int):
-    return search_pagina(id)
+    return search_pagina(id)        
 
 
 
@@ -58,7 +58,7 @@ def search_pagina(id : int):
 
 
 #POST
-@app.post("/paginas", status_code=201, response_model= PaginaWeb)
+@router.post("/", status_code=201, response_model= PaginaWeb)
 def add_pagina(pagina : PaginaWeb):
     pagina.id = next_id()
     paginasWeb_list.append(pagina)
@@ -70,7 +70,7 @@ def next_id():
 
 
 #PUT
-@app.put("/paginas/{id}")
+@router.put("/{id}")
 def modify_pagina(id:int, pagina:PaginaWeb):
     for index, saved_pagina in enumerate(paginasWeb_list):
         if saved_pagina.id == id:
@@ -84,7 +84,7 @@ def modify_pagina(id:int, pagina:PaginaWeb):
 
 
 #DELETE
-@app.delete("/paginas/{id}")
+@router.delete("/{id}")
 def remove_pagina(id : int):
     for saved_pagina in paginasWeb_list:
         if saved_pagina.id == id:
