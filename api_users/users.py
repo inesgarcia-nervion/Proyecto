@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel #Esta librería me va a permitir crear clases para mi API pero de forma mucho más sencilla.
 
 
 app = FastAPI()
 
+# Definimos la clase User
 class User(BaseModel):
     id : int
     name : str
@@ -11,6 +12,7 @@ class User(BaseModel):
     age : int
 
 
+# Creamos una lista de usuarios (simulando una base de datos)
 users_list = [
     User(id= 1, name = "Inés", surname="García", age=24), 
     User(id= 2, name = "Ángela", surname="García", age=27),     
@@ -38,13 +40,12 @@ def get_user(id : int):
 
 
 def search_user(id : int):        
-    #  buscamos usuario por id en la lista
-    # devuelve una lista vacía si no encuentra nada
-    # devuelve una lista con el usuario encontrado
+    # Buscamos usuario por id en la lista
+    # Devuelve una lista vacía si no encuentra nada
+    # Devuelve una lista con el usuario encontrado
     users = [user for user in users_list if user.id == id]  #en user.id, el id hace referencia a la clase creada arriba
 
-    # devolvemos la primera posición de la lista 
-    
+    # devolvemos la primera posición de la lista si existe
     if not users:
         raise HTTPException(status_code=404, detail="User not found")      # También se puede hacer: return users[0] if len(users) != 0 else {"error" : "User not found"}
     return users[0]
