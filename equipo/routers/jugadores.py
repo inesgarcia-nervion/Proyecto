@@ -40,12 +40,29 @@ def get_jugador(id : int):
     return search_jugador(id)
 
 
+
 def search_jugador(id : int):
     jugadores = [jugador for jugador in jugadores_list if jugador.id == id]
 
     if not jugadores:
         raise HTTPException(status_code=404, detail="Jugador no encontrado")
     return jugadores[0]
+
+
+
+@router.get("{id}/equipos")
+def get_jugador_equipo(id : int):
+    jugador = search_jugador(id)
+    #Si existe el usuario
+    if jugador:
+        #Buscamos que tenga equipo asignado
+        jugador = search_jugador(id)
+        if jugadores:
+            return jugador
+        raise HTTPException(status_code=404, detail="El jugador no tiene equipo asignado para {id}")
+    raise HTTPException(status_code=404, detail="Jugador no encontrado {id}")
+
+
 
 
 #POST 
