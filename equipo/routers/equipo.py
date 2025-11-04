@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from Proyecto.equipo.routers.jugadores import search_jugador 
 
 
 router = APIRouter(prefix="/equipo", tags=["Equipos"])     

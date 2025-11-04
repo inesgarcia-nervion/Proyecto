@@ -80,6 +80,8 @@ def next_id():
 #PUT: Modificar la información
 @app.put("/users/{id}") # Le tengo que pasar un id para que funcione
 def modify_user(id:int, user:User):
+    # El método enumerate devuelve el indice de la lista
+    # y el usuario almacenado en dicho indice
     for index, saved_user in enumerate(users_list):
         if saved_user.id == id:
             user.id = id
