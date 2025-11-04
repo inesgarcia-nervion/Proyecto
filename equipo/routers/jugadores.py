@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from Proyecto.equipo.routers.equipo import search_equipo
 
 router = APIRouter(prefix="/jugadores", tags=["Jugadores"])   
 
@@ -14,12 +15,12 @@ class Jugadores(BaseModel):
 
 
 jugadores_list = [
-    Jugadores(id=1, Nombre="Lionel Messi", Edad=36, Posición="Delantero", Nacionalidad="Argentina", Salario=41000000.0, idEquipo=10),
-    Jugadores(id=2, Nombre="Cristiano Ronaldo", Edad=39, Posición="Delantero", Nacionalidad="Portugal", Salario=50000000.0, idEquipo=7),
-    Jugadores(id=3, Nombre="Neymar Jr.", Edad=32, Posición="Delantero", Nacionalidad="Brasil", Salario=36000000.0, idEquipo=11),
-    Jugadores(id=4, Nombre="Kylian Mbappé", Edad=25, Posición="Delantero", Nacionalidad="Francia", Salario=22000000.0, idEquipo=7),
-    Jugadores(id=5, Nombre="Kevin De Bruyne", Edad=32, Posición="Centrocampista", Nacionalidad="Bélgica", Salario=20000000.0, idEquipo=17),
-    Jugadores(id=6, Nombre="Robert Lewandowski", Edad=35, Posición="Delantero", Nacionalidad="Polonia", Salario=25000000.0, idEquipo=9),
+    Jugadores(id=1, Nombre="Lionel Messi", Edad=36, Posición="Delantero", Nacionalidad="Argentina", Salario=41000000.0, idEquipo=1),
+    Jugadores(id=2, Nombre="Cristiano Ronaldo", Edad=39, Posición="Delantero", Nacionalidad="Portugal", Salario=50000000.0, idEquipo=2),
+    Jugadores(id=3, Nombre="Neymar Jr.", Edad=32, Posición="Delantero", Nacionalidad="Brasil", Salario=36000000.0, idEquipo=3),
+    Jugadores(id=4, Nombre="Kylian Mbappé", Edad=25, Posición="Delantero", Nacionalidad="Francia", Salario=22000000.0, idEquipo=3),
+    Jugadores(id=5, Nombre="Kevin De Bruyne", Edad=32, Posición="Centrocampista", Nacionalidad="Bélgica", Salario=20000000.0, idEquipo=4),
+    Jugadores(id=6, Nombre="Robert Lewandowski", Edad=35, Posición="Delantero", Nacionalidad="Polonia", Salario=25000000.0, idEquipo=1),
 ]
 
 
@@ -50,17 +51,19 @@ def search_jugador(id : int):
 
 
 
-@router.get("{id}/equipos")
-def get_jugador_equipo(id : int):
+#PETICION ANIDADA QUE DEVUELVE LOS JUGADORES DE UN EQUIPO
+@router.get("/{id}/equipos")
+def get_equipos(id : int):
     jugador = search_jugador(id)
     #Si existe el usuario
     if jugador:
         #Buscamos que tenga equipo asignado
-        jugador = search_jugador(id)
-        if jugadores:
-            return jugador
-        raise HTTPException(status_code=404, detail="El jugador no tiene equipo asignado para {id}")
+        equipos = search_equipo(id)
+        if equipos:
+            return equipos
+        raise HTTPException(status_code=404, detail="El jugador {id} no está asignado a ningún equipo")
     raise HTTPException(status_code=404, detail="Jugador no encontrado {id}")
+
 
 
 

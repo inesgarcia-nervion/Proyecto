@@ -45,6 +45,20 @@ def search_equipo(id : int):
 
 
 
+@router.get("/{id}/jugadores")
+def get_jugadores(id : int):
+    equipo = search_equipo(id)
+    #Si existe el equipo
+    if equipo: 
+        #Buscamos los jugadores que pertenezcan a ese equipo
+        jugadores = search_jugador(id)
+        if jugadores:
+            return jugadores
+        raise HTTPException(status_code=404, detail="El equipo {id} no tiene jugadores asignados")
+    raise HTTPException(status_code=404, detail="Equipo no encontrado {id}")
+
+
+
 
 #POST
 @router.post("/", status_code=201, response_model= Equipo)

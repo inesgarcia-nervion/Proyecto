@@ -1,11 +1,10 @@
-from fastapi import FastAPI
 from routers import equipo, jugadores
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-
-# Routers
+#Routers
 app.include_router(equipo.router)
 app.include_router(jugadores.router)
 
