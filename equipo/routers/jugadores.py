@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from Proyecto.equipo.routers.equipo import search_equipo
 
 router = APIRouter(prefix="/jugadores", tags=["Jugadores"])   
 
@@ -41,28 +40,15 @@ def get_jugador(id : int):
     return search_jugador(id)
 
 
+# PARA PODER JUNTAR LA ID DE EQUIPO CON SUS JUGADORES
+def search_jugador(idEquipo : int):
+    return [jugador for jugador in jugadores_list if jugador.idEquipo == idEquipo]
 
-def search_jugador(id : int):
-    jugadores = [jugador for jugador in jugadores_list if jugador.id == id]
+    #jugadores = [jugador for jugador in jugadores_list if jugador.id == id]
 
-    if not jugadores:
-        raise HTTPException(status_code=404, detail="Jugador no encontrado")
-    return jugadores[0]
-
-
-
-#PETICION ANIDADA QUE DEVUELVE LOS JUGADORES DE UN EQUIPO
-@router.get("/{id}/equipos")
-def get_equipos(id : int):
-    jugador = search_jugador(id)
-    #Si existe el usuario
-    if jugador:
-        #Buscamos que tenga equipo asignado
-        equipos = search_equipo(id)
-        if equipos:
-            return equipos
-        raise HTTPException(status_code=404, detail="El jugador {id} no está asignado a ningún equipo")
-    raise HTTPException(status_code=404, detail="Jugador no encontrado {id}")
+    #if not jugadores:
+    #    raise HTTPException(status_code=404, detail="Jugador no encontrado")
+    #return jugadores[0]
 
 
 
