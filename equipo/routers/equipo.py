@@ -21,20 +21,27 @@ equipos_list = [
     Equipo(id=6, Nombre="Villarreal CF", Ciudad="Villarreal", AñoFundación=1923, Estadio="Estadio de la Cerámica"),
 ]
 
-#GET
+#GET 
 @router.get("/")
 def equipos():
     return equipos_list
+
+
+#GET con query
+#http://127.0.0.1:8000/equipos?id=3
+@router.get("")
+def get_equipos(id : int):
+    equipos = search_equipo(id)
+    if equipos:
+        return equipos
+    raise HTTPException(status_code=404, detail="Equipo no encontrado")
+
 
 
 @router.get("/{id_equipo}")
 def get_equipo(id_equipo : int):
     return search_equipo(id_equipo)
 
-
-@router.get("/query/")                  
-def get_equipo(id : int):
-    return search_equipo(id)
 
 
 def search_equipo(id : int):
