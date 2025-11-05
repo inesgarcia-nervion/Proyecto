@@ -15,11 +15,11 @@ class Jugadores(BaseModel):
 
 jugadores_list = [
     Jugadores(id=1, Nombre="Lionel Messi", Edad=36, Posición="Delantero", Nacionalidad="Argentina", Salario=41000000.0, idEquipo=1),
-    Jugadores(id=2, Nombre="Cristiano Ronaldo", Edad=39, Posición="Delantero", Nacionalidad="Portugal", Salario=50000000.0, idEquipo=2),
-    Jugadores(id=3, Nombre="Neymar Jr.", Edad=32, Posición="Delantero", Nacionalidad="Brasil", Salario=36000000.0, idEquipo=3),
-    Jugadores(id=4, Nombre="Kylian Mbappé", Edad=25, Posición="Delantero", Nacionalidad="Francia", Salario=22000000.0, idEquipo=3),
-    Jugadores(id=5, Nombre="Kevin De Bruyne", Edad=32, Posición="Centrocampista", Nacionalidad="Bélgica", Salario=20000000.0, idEquipo=4),
-    Jugadores(id=6, Nombre="Robert Lewandowski", Edad=35, Posición="Delantero", Nacionalidad="Polonia", Salario=25000000.0, idEquipo=1),
+    Jugadores(id=2, Nombre="Cristiano Ronaldo", Edad=39, Posición="Delantero", Nacionalidad="Portugal", Salario=50000000.0, idEquipo=3),
+    Jugadores(id=3, Nombre="Neymar Jr.", Edad=32, Posición="Delantero", Nacionalidad="Brasil", Salario=36000000.0, idEquipo=4),
+    Jugadores(id=4, Nombre="Kylian Mbappé", Edad=25, Posición="Delantero", Nacionalidad="Francia", Salario=22000000.0, idEquipo=2),
+    Jugadores(id=5, Nombre="Kevin De Bruyne", Edad=32, Posición="Centrocampista", Nacionalidad="Bélgica", Salario=20000000.0, idEquipo=3),
+    Jugadores(id=6, Nombre="Robert Lewandowski", Edad=35, Posición="Delantero", Nacionalidad="Polonia", Salario=25000000.0, idEquipo=2),
 ]
 
 
@@ -40,15 +40,17 @@ def get_jugador(id : int):
     return search_jugador(id)
 
 
-# PARA PODER JUNTAR LA ID DE EQUIPO CON SUS JUGADORES
+
 def search_jugador(idEquipo : int):
     return [jugador for jugador in jugadores_list if jugador.idEquipo == idEquipo]
-
+    
+    
     #jugadores = [jugador for jugador in jugadores_list if jugador.id == id]
 
     #if not jugadores:
     #    raise HTTPException(status_code=404, detail="Jugador no encontrado")
     #return jugadores[0]
+
 
 
 

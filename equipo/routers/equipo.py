@@ -36,16 +36,6 @@ def get_equipo(id_equipo : int):
 def get_equipo(id : int):
     return search_equipo(id)
 
-# La siguiente lista pretende simular una base de datos de equipos
-equipos_list = [
-    Equipo(id=1, Nombre="FC Barcelona", Ciudad="Barcelona", AñoFundación=1899, Estadio="Camp Nou"),
-    Equipo(id=2, Nombre="Real Madrid", Ciudad="Madrid", AñoFundación=1902, Estadio="Santiago Bernabéu"),
-    Equipo(id=3, Nombre="Atlético de Madrid", Ciudad="Madrid", AñoFundación=1903, Estadio="Wanda Metropolitano"),
-    Equipo(id=4, Nombre="Sevilla FC", Ciudad="Sevilla", AñoFundación=1890, Estadio="Ramón Sánchez Pizjuán"),
-    Equipo(id=5, Nombre="Valencia CF", Ciudad="Valencia", AñoFundación=1919, Estadio="Mestalla"),
-    Equipo(id=6, Nombre="Villarreal CF", Ciudad="Villarreal", AñoFundación=1923, Estadio="Estadio de la Cerámica"),
-]
-
 
 def search_equipo(id : int):
     equipos = [equipo for equipo in equipos_list if equipo.id == id]
