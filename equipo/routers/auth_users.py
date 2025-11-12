@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 from datetime import *
 import jwt
+from jwt import PyJWKError
 from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -57,8 +58,15 @@ users_db = {
         "email": "prueba@prueba.es",
         "disabled": False,
         "password": "123456"
+    },
+    #PASSWORD 123456
+    "prueba2" : {
+        "username": "prueba2",
+        "fullname": "Prueba Prueba",
+        "email": "prueba2@prueba.es",
+        "disabled": False,
+        "password": "$argon2id$v=19$m=65536,t=3,p=4$+DZ8DjcTIgmCFfIijeaMAg$3vWRUJD833ctZzyrUwQ4jylDIvt1j7SpFT4mWEL8aKw"
     }
-    
 }
 
 
@@ -69,7 +77,7 @@ def register(user : UserDB): # UsuarioDB porque queremos la contraseña
     if user.username not in users_db:
         hashed_password = password_hash.hash(user.password)
         user.password = hashed_password # Sustituimos la contraseña por la encriptada (la nueva)
-        users_db[user.username] = user
+        users_db[user.username] = user.model_dump()
         return user
     raise HTTPException(status_code=409, detail="User already exists")
     
@@ -77,16 +85,39 @@ def register(user : UserDB): # UsuarioDB porque queremos la contraseña
 
 @router.post("/login")
 async def login(form: OAuth2PasswordRequestForm = Depends()):
-    user = users_db.get(form.username)
-    if user:    # Si no está en blanco
-        # Si el usuario no existe en la base de datos
+    user_db = users_db.get(form.username)
+    if user_db:    
+        # Si el usuario existe en la base de datos
         # Comprobamos las contraseñas
-        if password_hash.verify(form.password, user["password"]):
-            expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-            access_token = {"sub": user.username, "exp":expire}
-            # Generamos el token
-            token = jwt.encode(access_token, SECRET_KEY, algorithm=ALGORITHM)
-            return {"access_token":token, "token_type":"bearer"}
-        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+        # Creamos el usuario de tipo UserDB
+        user = UserDB(**user_db)    #** es porque el valor es un diccionario
+        try:
+            if password_hash.verify(form.password, user.password):
+                expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+                access_token = {"sub": user.username, "exp":expire}
+                # Generamos el token
+                token = jwt.encode(access_token, SECRET_KEY, algorithm=ALGORITHM)   #algorithm sin s
+                return {"access_token":token, "token_type":"bearer"}
+            #raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+        except:
+            raise HTTPException(status_code=400, detail="Error en la autenticación")
     raise HTTPException(status_code=401, detail="Usuario o contraseña incorrectos")
+
+
+
+async def authentication(token : str = Depends(outh2)):
+    try: 
+        username = jwt.decode(token, SECRET_KEY, algorithm=ALGORITHM).get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Credenciales de autentificación inválidas", 
+                                headers={"WWW-Autheticate" : "Bearer"})
+    except PyJWKError:
+        raise HTTPException(status_code=401, detail="Credenciales de autentificación inválidas", 
+                                headers={"WWW-Autheticate" : "Bearer"})
     
+    user = User(**users_db[username])
+    
+    if user.disabled:
+        raise HTTPException(status_code=400, detail="Usuario inactivo")
+    
+    return user

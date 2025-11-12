@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from .jugadores import search_jugador 
+from .auth_users import authentication
 
 
 router = APIRouter(prefix="/equipo", tags=["Equipos"])     
@@ -72,7 +73,7 @@ def get_jugadores(id : int):
 
 #POST
 @router.post("/", status_code=201, response_model= Equipo)
-def add_equipo(equipo : Equipo):
+def add_equipo(equipo : Equipo, authorized = Depends(authentication)):
     equipo.id = next_id()
     equipos_list.append(equipo)
     return equipo
