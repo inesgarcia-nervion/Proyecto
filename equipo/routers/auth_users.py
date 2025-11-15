@@ -1,33 +1,36 @@
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 
-from datetime import *
+# Libreria JWT
 import jwt
-from jwt import PyJWKError
+# Para trabajar las excepciones de los tokens 
 from jwt.exceptions import InvalidTokenError
+# Libreria para aplicar un hash a la contraseña
 from pwdlib import PasswordHash
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
+from jwt import PyJWKError
+from datetime import *
 
 
 
 # Clave que se reutilizará como semilla para generar el token
 # openssl rand -hex 32 (abrir terminal tipo git bash para generar una clave segura)
-SECRET_KEY = "b3a9e1c1bfbf86fb374ca4204b927d4329e52760d74e813956c67d49819c804c"  # Para el token
-# Algoritmo para cifrar el tokem
+SECRET_KEY = "b3a9e1c1bfbf86fb374ca4204b927d4329e52760d74e813956c67d49819c804c"  # Algoritmo para cifrar el token
 
-# Definimos el algoritmo de encriptacion
-ALGORITHM = "HS256"     # Para el token
+# Definimos el algoritmo de encriptacion (del token)
+ALGORITHM = "HS256"     
 
 # Duracion del token
-ACCESS_TOKEN_EXPIRE_MINUTES = 5   # Para el token
+ACCESS_TOKEN_EXPIRE_MINUTES = 5   
 
 
 
 #Objecto que se utilizará para el cálculo del hash y 
 # y la verificación de las contraseñas
-password_hash = PasswordHash.recommended()   # Para la contraseña
-
-outh2 = OAuth2PasswordBearer(tokenUrl="login")   # Para el token
+password_hash = PasswordHash.recommended()   
+# Para gestionar la autenticación (tokenUrl para indicar cual va a ser el path de nuestra autentificación)
+outh2 = OAuth2PasswordBearer(tokenUrl="login")   
 
 
 router = APIRouter()
@@ -41,7 +44,8 @@ class User(BaseModel):
 
 class UserDB(User):
     password : str
-   
+
+
 
 # Base de datos (tenemos que copiar aquí los usuarios porque necesitamos los hush (la contraseña))
 users_db = {
@@ -84,7 +88,7 @@ def register(user : UserDB): # UsuarioDB porque queremos la contraseña
 
 
 @router.post("/login")
-async def login(form: OAuth2PasswordRequestForm = Depends()):
+async def login(form: OAuth2PasswordRequestForm = Depends()):  # Depends para indicar que métodos van a requerir de autenficación para poder acceder
     user_db = users_db.get(form.username)
     if user_db:    
         # Si el usuario existe en la base de datos
@@ -92,8 +96,10 @@ async def login(form: OAuth2PasswordRequestForm = Depends()):
         # Creamos el usuario de tipo UserDB
         user = UserDB(**user_db)    #** es porque el valor es un diccionario
         try:
-            if password_hash.verify(form.password, user.password):
+            if password_hash.verify(form.password, user.password):   # Comprobar que la contraseña del formulario y la almacenada en la bbdd coinciden
+                # Tomamos la hora actual + el tiempo de expiración del token que es un min
                 expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+                # Parámetros de nuestro token: el uuser_db, fecha de expiración
                 access_token = {"sub": user.username, "exp":expire}
                 # Generamos el token
                 token = jwt.encode(access_token, SECRET_KEY, algorithm=ALGORITHM)   #algorithm sin s
