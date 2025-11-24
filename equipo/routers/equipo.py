@@ -31,7 +31,7 @@ def equipos():
 #GET con query
 #http://127.0.0.1:8000/equipos?id=3
 @router.get("")
-def get_equipos(id : int):
+def get_equipos_query(id : int):
     equipos = search_equipo(id)
     if equipos:
         return equipos
@@ -54,6 +54,7 @@ def search_equipo(id : int):
 
 
 
+# DISTINTO DE JUGADORES
 # PARA PODER JUNTAR LA ID DE EQUIPO CON SUS JUGADORES
 # EJEMPLO DE LO QUE TENEMOS QUE PONER PARA QUE FUNCIONE http://127.0.0.1:8000/equipo/3/jugadores
 @router.get("/{id}/jugadores")

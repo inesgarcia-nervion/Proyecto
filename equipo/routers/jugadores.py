@@ -36,21 +36,20 @@ def get_jugador(id_jugador : int):
     return search_jugador(id_jugador)
 
 
-@router.get("/query/")                  
-def get_jugador(id : int):
+#GET con query
+#http://127.0.0.1:8000/jugadores?id=3
+@router.get("")                  
+def get_jugador_query(id : int): 
     return search_jugador(id)
 
 
 
-def search_jugador(idEquipo : int):
-    return [jugador for jugador in jugadores_list if jugador.idEquipo == idEquipo]
-    
-    
-    #jugadores = [jugador for jugador in jugadores_list if jugador.id == id]
+def search_jugador(id : int):
+    jugadores = [jugador for jugador in jugadores_list if jugador.id == id]
 
-    #if not jugadores:
-    #    raise HTTPException(status_code=404, detail="Jugador no encontrado")
-    #return jugadores[0]
+    if not jugadores:
+        raise HTTPException(status_code=404, detail="Jugador no encontrado")
+    return jugadores[0]
 
 
 
