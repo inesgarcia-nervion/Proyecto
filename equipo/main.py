@@ -1,4 +1,4 @@
-from routers import equipo, jugadores, auth_users
+from routers import equipo, jugadores, auth_users, jugadores_db, equipos_db
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
@@ -8,6 +8,8 @@ app = FastAPI()
 app.include_router(equipo.router)
 app.include_router(jugadores.router)
 app.include_router(auth_users.router)
+app.include_router(jugadores_db.router)
+app.include_router(equipos_db.router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
