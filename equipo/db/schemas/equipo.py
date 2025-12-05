@@ -4,9 +4,9 @@ def equipo_schema(equipo) -> dict:
         "id": str(equipo["_id"]),
         "Nombre": equipo["Nombre"],
         "Ciudad": equipo["Ciudad"],
-        "Estadio": equipo["Estadio"],
-        "Presupuesto": equipo["Presupuesto"]
+        "AñoFundación": equipo["AñoFundación"],
+        "Estadio": equipo["Estadio"]
     }
- 
+
 def equipos_schema(equipos) -> list:
     return [equipo_schema(equipo) for equipo in equipos]

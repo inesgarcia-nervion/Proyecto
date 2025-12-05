@@ -1,13 +1,14 @@
+from os import getenv
 from pymongo import MongoClient
 
 
-# Nos creamos un objeto de tipo MongoClient
-# Al crear el objeto ya establecemos una conexión con la base de datos
-# No le indicamos ningún parámetro al constructor porque vamos a conectar con la base de datos local por defecto
-# Si la base de datos estuviese en un servidor si que tendríamos que indicarle la URL del servidor
+# Create a MongoClient using an explicit URI (default to local)
+# You can override the URI by setting the environment variable MONGODB_URI
+MONGO_URI = getenv("MONGODB_URI", "mongodb://localhost:27017")
 
-# Base de datos en local
-db_client = MongoClient()
+# Set sensible timeouts so connection attempts fail fast when MongoDB isn't available
+# serverSelectionTimeoutMS controls how long the driver will try to find a server
+# connectTimeoutMS controls how long a socket connect will wait
+db_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=20000, connectTimeoutMS=20000)
 
-# Base de datos en remoto
-# db_client = MongoClient()
+# Example: to use a remote DB set MONGODB_URI='mongodb://user:pass@host:27017/dbname'
