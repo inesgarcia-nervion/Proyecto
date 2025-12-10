@@ -7,7 +7,7 @@ from pymongo import MongoClient
 # Si la base de datos estuviese en un servidor si que tendríamos que indicarle la URL del servidor
 
 # Base de datos en local
-db_client = MongoClient()
+db_client = MongoClient("mongodb+srv://inesgarcia_db_user:<db_password>@cluster0.alqg98m.mongodb.net/?appName=Cluster0")
 
 # Base de datos en remoto
 # db_client = MongoClient()
