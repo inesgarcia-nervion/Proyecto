@@ -8,6 +8,10 @@ from pymongo import MongoClient
 # You can override the URI by setting the environment variable MONGODB_URI
 MONGO_URI = getenv("MONGODB_URI", "mongodb://localhost:27017")
 
+
+# Base de datos en local
+db_client = MongoClient("mongodb+srv://inesgarcia_db_user:<db_password>@cluster0.alqg98m.mongodb.net/?appName=Cluster0")
+
 # Set sensible timeouts so connection attempts fail fast when MongoDB isn't available
 # serverSelectionTimeoutMS controls how long the driver will try to find a server
 # connectTimeoutMS controls how long a socket connect will wait
