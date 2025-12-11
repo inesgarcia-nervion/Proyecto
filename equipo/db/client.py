@@ -1,3 +1,5 @@
+# Nos va a permitir conectarnos a nuestra base de datos.
+
 from os import getenv
 from pymongo import MongoClient
 

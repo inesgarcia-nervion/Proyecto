@@ -1,3 +1,8 @@
+#pip install "fastapi[standard]"
+# autenticacion con JWT: pip install pyjwt
+# Para hashing de contraseñas:  pip install "pwdlib[argon2]"
+# Base de datos MongoDB: pip install pymongo
+
 from routers import equipo, jugadores, auth_users, jugadores_db, equipos_db
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
